@@ -17,6 +17,13 @@ async function run() {
     try {
         await client.connect();
         const userCollection = client.db("gymequipment").collection("products");
+        app.get('/users', async (req, res) => {
+
+            const query = {};
+            const cursor = userCollection.find(query);
+            const users = await cursor.toArray();
+            res.send(users)
+        })
 
     } finally {
 
