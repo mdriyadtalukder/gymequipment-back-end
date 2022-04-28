@@ -18,12 +18,13 @@ async function run() {
         await client.connect();
         const userCollection = client.db("gymequipment").collection("products");
         app.get('/users', async (req, res) => {
-
             const query = {};
             const cursor = userCollection.find(query);
             const users = await cursor.toArray();
             res.send(users)
         })
+
+
 
     } finally {
 
@@ -32,7 +33,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Hello gym equpment house!')
 })
 
 app.listen(port, () => {
