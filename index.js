@@ -29,6 +29,20 @@ async function run() {
             const query = { _id: ObjectId(id) };
             const result = await userCollection.findOne(query);
             res.send(result);
+        });
+        app.put('/user/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateUser=req.body;
+            const filter = { _id: ObjectId(id) };
+            const options={upsert:true};
+            const updateDoc={
+                $set:{
+                    quantity:updateUser.quantity
+                }
+            }
+
+            const result = await movies.updateOne(filter, updateDoc, options);
+            res.send(result);
         })
 
     } finally {
