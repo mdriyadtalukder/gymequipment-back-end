@@ -24,6 +24,14 @@ async function run() {
             const users = await cursor.toArray();
             res.send(users)
         })
+
+        app.post('/users', async (req, res) => {
+            const newUser = req.body;
+            console.log(newUser);
+            const result = await userCollection.insertOne(newUser);
+            res.send(result);
+
+        });
         app.get('/user/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -32,12 +40,12 @@ async function run() {
         });
         app.put('/user/:id', async (req, res) => {
             const id = req.params.id;
-            const updateUser=req.body;
+            const updateUser = req.body;
             const filter = { _id: ObjectId(id) };
-            const options={upsert:true};
-            const updateDoc={
-                $set:{
-                    quantity:updateUser.quantity
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    quantity: updateUser.quantity
                 }
             };
 
