@@ -25,6 +25,15 @@ async function run() {
             res.send(users)
         })
 
+        app.get('/users', async (req, res) => {
+            const email=req.query.email;
+            const query = {email:email};
+            const cursor = userCollection.find(query);
+            const users = await cursor.toArray();
+            res.send(users)
+        })
+
+
         app.post('/users', async (req, res) => {
             const newUser = req.body;
             console.log(newUser);
