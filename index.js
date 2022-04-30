@@ -18,20 +18,23 @@ async function run() {
     try {
         await client.connect();
         const userCollection = client.db("gymequipment").collection("products");
-        app.get('/users', async (req, res) => {
-            const email = req.query.email;
-            const query = { email: email };
-            const cursor = userCollection.find(query);
-            const users = await cursor.toArray();
-            res.send(users)
-        })
 
         app.get('/users', async (req, res) => {
-            const query = {};
-            const cursor = userCollection.find(query);
-            const users = await cursor.toArray();
-            res.send(users)
-        })
+            if (req.query.email) {
+                const email = req.query.email;
+                const query = { email: email };
+                const cursor = userCollection.find(query);
+                const users = await cursor.toArray();
+                res.send(users)
+            }
+            else {
+                const query = {};
+                const cursor = userCollection.find(query);
+                const users = await cursor.toArray();
+                res.send(users)
+            }
+
+        });
 
         app.post('/users', async (req, res) => {
             const newUser = req.body;
