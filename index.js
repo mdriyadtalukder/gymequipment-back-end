@@ -21,7 +21,6 @@ function verifyJWT(req, res, next) {
         if (err) {
             return res.status(403).send({ message: 'Forbidden access' });
         }
-        console.log('decoded', decoded);
         req.decoded = decoded;
         next();
     })
@@ -45,6 +44,7 @@ async function run() {
             res.send({ accessToken });
         });
 
+       //Get Users
 
         app.get('/users', async (req, res) => {
             const query = {};
@@ -52,6 +52,8 @@ async function run() {
             const users = await cursor.toArray();
             res.send(users);
         });
+    
+        //Delete User
 
         app.delete('/user/:id', async (req, res) => {
             const id = req.params.id;
@@ -76,6 +78,9 @@ async function run() {
             }
 
         });
+
+        //Add User
+
         app.post('/users', async (req, res) => {
             const newUser = req.body;
             console.log(newUser);
@@ -83,13 +88,18 @@ async function run() {
             res.send(result);
 
         });
-
+        
+        //Get Users By Id
+        
         app.get('/user/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await userCollection.findOne(query);
             res.send(result);
         });
+
+        //Update User
+
         app.put('/user/:id', async (req, res) => {
             const id = req.params.id;
             const updateUser = req.body;
