@@ -34,6 +34,8 @@ async function run() {
 
         app.get('/users', async (req, res) => {
             if (req.query.email) {
+                const authHeader = req.headers.authorization;
+                console.log(authHeader);
                 const email = req.query.email;
                 const query = { email: email };
                 const cursor = userCollection.find(query);
