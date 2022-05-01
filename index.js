@@ -22,12 +22,14 @@ function verifyJWT(req, res, next) {
 
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const { add } = require('nodemon/lib/rules');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.u8fjq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 async function run() {
     try {
         await client.connect();
         const userCollection = client.db("gymequipment").collection("products");
+        const addCollection = client.db("additems").collection("addproduct");
 
 
         app.post('/login', async (req, res) => {
@@ -39,27 +41,25 @@ async function run() {
             res.send({ accessToken });
         });
 
-
-
         app.get('/users', async (req, res) => {
-            if (req.query.email) {
-                verifyJWT();
-                const email = req.query.email;
-                const query = { email: email };
-                const cursor = userCollection.find(query);
-                const users = await cursor.toArray();
-                res.send(users);
-            }
-            else {
-                const query = {};
-                const cursor = userCollection.find(query);
-                const users = await cursor.toArray();
-                res.send(users)
-            }
+            const query = {};
+            const cursor = userCollection.find(query);
+            const users = await cursor.toArray();
+            res.send(users);
+        });
+
+        app.get('/adduser', async (req, res) => {
+
+
+            const email = req.query.email;
+            const query = { email: email };
+            const cursor = addCollection.find(query);
+            const users = await cursor.toArray();
+            res.send(users);
 
         });
 
-        app.post('/users', async (req, res) => {
+        app.post('/adduser', async (req, res) => {
             const newUser = req.body;
             console.log(newUser);
             const result = await userCollection.insertOne(newUser);
