@@ -29,7 +29,6 @@ async function run() {
     try {
         await client.connect();
         const userCollection = client.db("gymequipment").collection("products");
-        const addCollection = client.db("adduser").collection("addproducts");
 
         app.post('/login', async (req, res) => {
             const user = req.body;
@@ -40,33 +39,12 @@ async function run() {
             res.send({ accessToken });
         });
 
+
         app.get('/users', async (req, res) => {
             const query = {};
             const cursor = userCollection.find(query);
             const users = await cursor.toArray();
             res.send(users);
-        });
-        app.get('/addusers', async (req, res) => {
-            const query = {};
-            const cursor = addCollection.find(query);
-            const users = await cursor.toArray();
-            res.send(users);
-        });
-
-        app.get('/addusers', async (req, res) => {
-            const email = req.query.email;
-            const query = { email: email };
-            const cursor = addCollection.find(query);
-            const users = await cursor.toArray();
-            res.send(users);
-
-        });
-        app.post('/addusers', async (req, res) => {
-            const newUser = req.body;
-            console.log(newUser);
-            const result = await addCollection.insertOne(newUser);
-            res.send(result);
-
         });
 
         app.delete('/user/:id', async (req, res) => {
@@ -74,6 +52,22 @@ async function run() {
             const query = { _id: ObjectId(id) };
             const result = await userCollection.deleteOne(query);
             res.send(result);
+        });
+
+        app.get(`/addusers`, async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const cursor = userCollection.find(query);
+            const addusers = await cursor.toArray();
+            res.send(addusers);
+
+        });
+        app.post('/users', async (req, res) => {
+            const newUser = req.body;
+            console.log(newUser);
+            const result = await userCollection.insertOne(newUser);
+            res.send(result);
+
         });
 
         app.get('/user/:id', async (req, res) => {
@@ -92,7 +86,7 @@ async function run() {
                     quantity: updateUser.quantity
                 }
             };
-
+            
             const result = await userCollection.updateOne(filter, updateDoc, options);
             res.send(result);
         })
