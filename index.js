@@ -23,8 +23,9 @@ function verifyJWT(req, res, next) {
         }
         console.log('decoded', decoded);
         req.decoded = decoded;
+        next();
     })
-    next();
+
 }
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
@@ -60,7 +61,7 @@ async function run() {
         });
 
         //Add item collection API
-        
+
         app.get(`/addusers`, verifyJWT, async (req, res) => {
             const decodedEmail = req.decoded.email;
             const email = req.query.email;
