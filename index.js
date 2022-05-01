@@ -1,5 +1,6 @@
 const express = require('express');
 var cors = require('cors');
+const jwt = require('jsonwebtoken');
 const app = express();
 require('dotenv').config();
 const ObjectId = require('mongodb').ObjectId;
@@ -18,6 +19,18 @@ async function run() {
     try {
         await client.connect();
         const userCollection = client.db("gymequipment").collection("products");
+
+
+        app.post('/login', async (req, res) => {
+            const user = req.body;
+            const accessToken = jwt.sign(user, process.env.app.ACCESS_TOKEN_SECRET, {
+                expiresId: 'Id'
+            });
+
+            res.send({ accessToken });
+        });
+
+
 
         app.get('/users', async (req, res) => {
             if (req.query.email) {
