@@ -44,7 +44,7 @@ async function run() {
             res.send({ accessToken });
         });
 
-       //Get Users
+        //Get Users
 
         app.get('/users', async (req, res) => {
             const query = {};
@@ -52,7 +52,7 @@ async function run() {
             const users = await cursor.toArray();
             res.send(users);
         });
-    
+
         //Delete User
 
         app.delete('/user/:id', async (req, res) => {
@@ -73,10 +73,11 @@ async function run() {
                 const addusers = await cursor.toArray();
                 res.send(addusers);
             }
-            else{
-                res.status(403).send({message:'forbidden access'});
+            else {
+                res.status(403).send({ message: 'forbidden access' });
             }
 
+            
         });
 
         //Add User
@@ -88,9 +89,9 @@ async function run() {
             res.send(result);
 
         });
-        
+
         //Get Users By Id
-        
+
         app.get('/user/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
